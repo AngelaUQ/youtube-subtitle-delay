@@ -55,7 +55,7 @@ function startObservation() {
 
       clearInterval(checkElementInterval)
       if (!!+options.delay) {
-        showToast(`Subtitle delay set as ${options.delay} sec !`)
+        showToast(`Subtitle delay set as ${options.delay >= 0 ? '+' : ''}${options.delay} sec !`);
       } else {
         showToast("Delay functionality added :)")
       }
@@ -72,13 +72,19 @@ function startObservation() {
 function updateDelayedSubtitle(nextContent, nextStyles) {
   let delay = (+options.delay * 1000) || 0
 
-  setTimeout(() => {
+  if (delay > 0) {
+    setTimeout(applySubtitleUpdate, delay);
+  } else {
+    applySubtitleUpdate();
+  }
+}
+
+function applySubtitleUpdate() {
     delayedSubtitleElm.innerHTML = nextContent.replaceAll("translateY", "translateYFake");
     delayedSubtitleElm.setAttribute("style", nextStyles)
     delayedSubtitleElm.firstChild.id = ""
-
-    delayedSubtitleElm.firstChild.style.width = `calc(${subtitleElm.clientWidth}px - ${delayedSubtitleElm.firstChild.style.left} + 50px)`;
-  }, delay);
+    delayedSubtitleElm.firstChild.style.width =
+      `calc(${subtitleElm.clientWidth}px - ${delayedSubtitleElm.firstChild.style.left} + 50px)`;
 }
 
 function handleMessages(data) {
