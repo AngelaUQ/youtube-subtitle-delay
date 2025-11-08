@@ -110,7 +110,7 @@ function handleKeyup(e) {
       action: globalActions.SET_OPTIONS,
       options: {
         ...options,
-        delay: Math.min(5, Math.max(0, updatedDelay.toFixed(1)))
+        delay: Math.min(120, Math.max(-120, updatedDelay.toFixed(1)))
       }
     })
   }
